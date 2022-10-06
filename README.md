@@ -18,6 +18,18 @@ This project may be exported and deployed on-chain as a registry, but for now is
    3. `generateSVG(string contents, string viewBox, string width, string height)`: Generates a SVG tag and content for an SVG image.
    4. `generateEncodedSVG(string contents, string viewBox, string width, string height)`: Same as above but generates a data-uri instead of the raw SVG.
    5. `generateJSONArray(MetadataBuilder.JSONItem[] itemsArray)`: Takes an array of items and using the `value` and `quote` flags generates a JSON array. Ignores the `key` value of the object and empty `values` will be removed from the array generated.
+   6. `encodeURI(string contentType, string content)`: Encodes the given content string as a base-64 data-uri with the given contentType.
+2. `MetadataMIMETypes`: List of common metadata mime type constants
+   1. `mimeJSON = "application/json"`
+   2. `mimeSVG = "image/svg+xml"`
+   3. `mimeTextPlain = "text/plain"`
+3. `MetadataJSONKeys`: List of common NFT Metadata JSON keys
+   1. `keyName = "name"`
+   2. `keyDescription = "description"`
+   3. `keyImage = "image"`
+   4. `keyAnimationURL = "animation_url"`
+   5. `keyAttributes = "attributes"`
+   6. `keyProperties = "properties";`
 
 * All methods are views returning strings unless otherwise noted.
 
