@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.15;
 
-import {Base64} from "@openzeppelin/contracts/utils/Base64.sol";
-import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
-import {Math} from "@openzeppelin/contracts/utils/math/Math.sol";
+import {Base64} from "./lib/Base64.sol";
+import {Strings} from "./lib/Strings.sol";
+import {MetadataMIMETypes} from "./MetadataMIMETypes.sol";
 
 library MetadataBuilder {
     struct JSONItem {
@@ -12,9 +12,38 @@ library MetadataBuilder {
         bool quote;
     }
 
-    string constant key_name = "name";
-    string constant key_description = "description";
-    string constant key_image = "image";
+    function generateSVG(
+        string memory contents,
+        string memory viewBox,
+        string memory width,
+        string memory height
+    ) internal pure returns (string memory) {
+        return
+            string.concat(
+                '<svg viewBox="',
+                viewBox,
+                '" xmlns="http://www.w3.org/2000/svg" width="',
+                width,
+                '" height="',
+                height,
+                '">',
+                contents,
+                "</svg>"
+            );
+    }
+
+    function generateEncodedSVG(
+        string memory contents,
+        string memory viewBox,
+        string memory width,
+        string memory height
+    ) internal pure returns (string memory) {
+        return
+            encodeURI(
+                MetadataMIMETypes.mimeSVG,
+                generateSVG(contents, viewBox, width, height)
+            );
+    }
 
     function encodeURI(string memory uriType, string memory result)
         internal
@@ -30,7 +59,7 @@ library MetadataBuilder {
             );
     }
 
-    function generateJSONARray(JSONItem[] memory items)
+    function generateJSONArray(JSONItem[] memory items)
         internal
         pure
         returns (string memory result)
@@ -42,7 +71,7 @@ library MetadataBuilder {
                 postfix = "]";
             }
             if (items[i].quote) {
-                result = string(result, items[i].value, postfix);
+                result = string.concat(result, items[i].value, postfix);
             } else {
                 result = string.concat(
                     result,
@@ -94,6 +123,6 @@ library MetadataBuilder {
         pure
         returns (string memory)
     {
-        return encodeURI("application/json", generateJSON(items));
+        return encodeURI(MetadataMIMETypes.mimeJSON, generateJSON(items));
     }
 }
