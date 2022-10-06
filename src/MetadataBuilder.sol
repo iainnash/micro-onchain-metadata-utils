@@ -64,27 +64,30 @@ library MetadataBuilder {
         pure
         returns (string memory result)
     {
-        if (items.length == 0) {
-            return "[]";
-        }
         result = "[";
-        string memory postfix = ",";
+        uint256 added = 0;
         for (uint256 i = 0; i < items.length; i++) {
-            if (i == items.length - 1) {
-                postfix = "]";
+            if (bytes(items[i].value).length == 0) {
+                continue;
             }
             if (items[i].quote) {
                 result = string.concat(
                     result,
+                    added == 0 ? "" : ",",
                     '"',
                     items[i].value,
-                    '"',
-                    postfix
+                    '"'
                 );
             } else {
-                result = string.concat(result, items[i].value, postfix);
+                result = string.concat(
+                    result,
+                    added == 0 ? "" : ",",
+                    items[i].value
+                );
             }
+            added += 1;
         }
+        result = string.concat(result, "]");
     }
 
     function generateJSON(JSONItem[] memory items)
@@ -92,36 +95,35 @@ library MetadataBuilder {
         pure
         returns (string memory result)
     {
-        if (items.length == 0) {
-            return "{}";
-        }
         result = "{";
-        string memory postfix = ",";
+        uint256 added = 0;
         for (uint256 i = 0; i < items.length; i++) {
-            if (i == items.length - 1) {
-                postfix = "}";
+            if (bytes(items[i].value).length == 0) {
+                continue;
             }
             if (items[i].quote) {
                 result = string.concat(
                     result,
+                    added == 0 ? "" : ",",
                     '"',
                     items[i].key,
                     '": "',
                     items[i].value,
-                    '"',
-                    postfix
+                    '"'
                 );
             } else {
                 result = string.concat(
                     result,
+                    added == 0 ? "" : ",",
                     '"',
                     items[i].key,
                     '": ',
-                    items[i].value,
-                    postfix
+                    items[i].value
                 );
             }
+            added += 1;
         }
+        result = string.concat(result, "}");
     }
 
     function generateEncodedJSON(JSONItem[] memory items)
