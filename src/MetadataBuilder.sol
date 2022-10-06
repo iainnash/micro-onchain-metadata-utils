@@ -32,6 +32,11 @@ library MetadataBuilder {
             );
     }
 
+    /// @notice prefer to use properties with key-value object instead of list
+    function generateAttributes(string memory displayType, string memory traitType, string memory value) internal pure returns (string memory) {
+
+    }
+
     function generateEncodedSVG(
         string memory contents,
         string memory viewBox,
