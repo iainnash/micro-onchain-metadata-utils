@@ -34,6 +34,43 @@ contract CounterTest is Test {
         vm.parseJson(jsonResult);
     }
 
+    function testGenerateJSONArrayFull() public {
+        MetadataBuilder.JSONItem[]
+            memory array = new MetadataBuilder.JSONItem[](2);
+        array[0].value = "testing";
+        array[0].quote = true;
+        array[1].value = '23';
+        array[1].quote = false;
+
+        string memory arrayResult = MetadataBuilder.generateJSONArray(array);
+        assertEq(arrayResult, '["testing",23]');
+    }
+
+    function testGenerateJSONArraySingle() public {
+        MetadataBuilder.JSONItem[]
+            memory array = new MetadataBuilder.JSONItem[](1);
+        array[0].value = "true";
+        array[0].quote = false;
+        string memory arrayResult = MetadataBuilder.generateJSONArray(array);
+        assertEq(arrayResult, "[true]");
+    }
+
+    function testGenerateJSONArrayEmpty() public {
+        MetadataBuilder.JSONItem[]
+            memory emptyArray = new MetadataBuilder.JSONItem[](0);
+        string memory arrayResult = MetadataBuilder.generateJSONArray(
+            emptyArray
+        );
+        assertEq(arrayResult, "[]");
+    }
+
+    function testGenerateJSONEmptyObject() public {
+        MetadataBuilder.JSONItem[]
+            memory emptyItems = new MetadataBuilder.JSONItem[](0);
+        string memory result = MetadataBuilder.generateJSON(emptyItems);
+        assertEq(result, "{}");
+    }
+
     function testGenerateJSONMoreItems() public {
         MetadataBuilder.JSONItem[]
             memory attributes = new MetadataBuilder.JSONItem[](1);

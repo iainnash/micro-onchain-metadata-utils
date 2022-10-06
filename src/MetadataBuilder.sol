@@ -64,6 +64,9 @@ library MetadataBuilder {
         pure
         returns (string memory result)
     {
+        if (items.length == 0) {
+            return "[]";
+        }
         result = "[";
         string memory postfix = ",";
         for (uint256 i = 0; i < items.length; i++) {
@@ -71,8 +74,6 @@ library MetadataBuilder {
                 postfix = "]";
             }
             if (items[i].quote) {
-                result = string.concat(result, items[i].value, postfix);
-            } else {
                 result = string.concat(
                     result,
                     '"',
@@ -80,6 +81,8 @@ library MetadataBuilder {
                     '"',
                     postfix
                 );
+            } else {
+                result = string.concat(result, items[i].value, postfix);
             }
         }
     }
@@ -89,6 +92,9 @@ library MetadataBuilder {
         pure
         returns (string memory result)
     {
+        if (items.length == 0) {
+            return "{}";
+        }
         result = "{";
         string memory postfix = ",";
         for (uint256 i = 0; i < items.length; i++) {
