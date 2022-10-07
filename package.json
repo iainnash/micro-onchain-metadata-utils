@@ -7,9 +7,9 @@
     "src": "src",
     "test": "test"
   },
-  "files": ['src', 'out'],
+  "files": ["src", "out"],
   "scripts": {
-    "test": "forge test"
+    "test": "forge test",
     "build": "forge build"
   },
   "repository": {
