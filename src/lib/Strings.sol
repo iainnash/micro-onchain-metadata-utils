@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // OpenZeppelin Contracts (last updated v4.7.0) (utils/Strings.sol)
 
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.10;
 
 /**
  * @dev String operations.
@@ -9,6 +9,22 @@ pragma solidity ^0.8.0;
 library Strings {
     bytes16 private constant _HEX_SYMBOLS = "0123456789abcdef";
     uint8 private constant _ADDRESS_LENGTH = 20;
+
+    function toString(int256 value) internal pure returns (string memory) {
+        string memory negative = "";
+        if (value < 0) {
+            negative = "-";
+            value *= -1;
+        }
+
+        if (value == type(int256).min) {
+            // hard-coded since int256 min value can't be converted to unsigned
+            return
+                "-57896044618658097711785492504343953926634992332820282019728792003956564819968";
+        }
+
+        return string(abi.encodePacked(negative, toString(uint256(value))));
+    }
 
     /**
      * @dev Converts a `uint256` to its ASCII `string` decimal representation.
@@ -54,7 +70,11 @@ library Strings {
     /**
      * @dev Converts a `uint256` to its ASCII `string` hexadecimal representation with fixed length.
      */
-    function toHexString(uint256 value, uint256 length) internal pure returns (string memory) {
+    function toHexString(uint256 value, uint256 length)
+        internal
+        pure
+        returns (string memory)
+    {
         bytes memory buffer = new bytes(2 * length + 2);
         buffer[0] = "0";
         buffer[1] = "x";

@@ -4,7 +4,7 @@ pragma solidity ^0.8.13;
 import "forge-std/Test.sol";
 import "../src/MetadataBuilder.sol";
 
-contract CounterTest is Test {
+contract MetadataBuilderTest is Test {
     function testEncodeURI() public {
         assertEq(
             MetadataBuilder.encodeURI("application/json", '{"test": true}'),
@@ -53,6 +53,26 @@ contract CounterTest is Test {
         array[0].quote = false;
         string memory arrayResult = MetadataBuilder.generateJSONArray(array);
         assertEq(arrayResult, "[true]");
+    }
+
+    function testGenerateJSONArrayQuoteSingle() public {
+        MetadataBuilder.JSONItem[]
+            memory array = new MetadataBuilder.JSONItem[](1);
+        array[0].value = '"the greatest ever"';
+        array[0].quote = true;
+        string memory arrayResult = MetadataBuilder.generateJSONArray(array);
+        assertEq(arrayResult, '["\\"the greatest ever\\""]');
+    }
+
+    function testGenerateJSONQuoteObject() public {
+        MetadataBuilder.JSONItem[]
+            memory array = new MetadataBuilder.JSONItem[](1);
+        array[0].key = "testingkey";
+        array[0].value = '"double"""troubleQuoteing""';
+        array[0].quote = true;
+        string memory arrayResult = MetadataBuilder.generateJSON(array);
+        assertEq(arrayResult, '{"testingkey": "\\"double\\"\\"\\"troubleQuoteing\\"\\""}');
+        assertEq(MetadataBuilder.generateEncodedJSON(array), "data:application/json;base64,eyJ0ZXN0aW5na2V5IjogIiJkb3VibGUiIiJ0cm91YmxlUXVvdGVpbmciIiJ9");
     }
 
     function testGenerateJSONArrayEmpty() public {
