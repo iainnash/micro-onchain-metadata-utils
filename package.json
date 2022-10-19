@@ -1,6 +1,6 @@
 {
   "name": "micro-onchain-metadata-utils",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "On-chain JSON builder in solidity",
   "directories": {
     "lib": "lib",
