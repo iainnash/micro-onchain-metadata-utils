@@ -8,7 +8,7 @@ pragma solidity ^0.8.10;
 library Uri {
     function encodeURI(string memory uriType, string memory result)
         internal
-        view
+        pure
         returns (string memory)
     {
         return

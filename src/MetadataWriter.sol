@@ -76,8 +76,12 @@ library JsonWriter {
         return writeStart(json, propertyName, OPEN_BRACE);
     }
 
-    function generateEncodedJSON(Json memory json) internal pure returns (string memory) {
-      return Uri.encodeURI(MetadataMIMETypes.mimeJSON, json.value);
+    function generateEncodedJSON(Json memory json)
+        internal
+        pure
+        returns (string memory)
+    {
+        return Uri.encodeURI(MetadataMIMETypes.mimeJSON, json.value);
     }
 
     /**
@@ -140,6 +144,15 @@ library JsonWriter {
         return json;
     }
 
+    function writeTypeValue(
+        Json memory json,
+        string memory name,
+        string memory mimeType,
+        string memory value
+    ) internal pure returns (Json memory) {
+        return writeProperty(json, name, Uri.encodeURI(mimeType, value));
+    }
+
     /**
      * @dev Writes the address value (as a JSON string) as an element of a JSON array.
      */
@@ -160,7 +173,12 @@ library JsonWriter {
             );
         } else {
             json.value = string(
-                abi.encodePacked(json.value, '"', Strings.toHexString(value), '"')
+                abi.encodePacked(
+                    json.value,
+                    '"',
+                    Strings.toHexString(value),
+                    '"'
+                )
             );
         }
 
@@ -638,5 +656,4 @@ library JsonWriter {
     {
         return json.depthBitTracker | (int256(1) << 255);
     }
-
 }
